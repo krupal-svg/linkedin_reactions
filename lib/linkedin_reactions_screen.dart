@@ -56,7 +56,8 @@ class _ReactionsButtonWidgetState extends State<ReactionsButtonWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onLongPress: _overlayController.toggle,
+      // onLongPress: _overlayController.toggle,
+      onLongPress: () => _showOverlay(context, text: "Hello"),
       child: OverlayPortal(
         controller: _overlayController,
         child: const Icon(Icons.thumb_up_sharp,),
@@ -77,14 +78,12 @@ class _ReactionsButtonWidgetState extends State<ReactionsButtonWidget> {
                     reactionWidth,
                     box.size.height,
                   );
-          
                   if (reactionBounds.contains(localPosition)) {
                     _onPointerEnter(index);
                     return;
                   }
                 }
               }
-          
               _onPointerExit();
             },
             onPointerUp: (event) {
@@ -108,7 +107,6 @@ class _ReactionsButtonWidgetState extends State<ReactionsButtonWidget> {
                       fontSize = normalSize;
                     }
                     _lastFontSizes[index] = fontSize;
-          
                     return TweenAnimationBuilder(
                       tween: Tween(begin: _lastFontSizes[index], end: fontSize),
                       duration: const Duration(milliseconds: 200),
@@ -126,6 +124,77 @@ class _ReactionsButtonWidgetState extends State<ReactionsButtonWidget> {
       ),
     );
   }
+
+  void _showOverlay(BuildContext context, {required String text}) async {
+   OverlayState? overlayState = Overlay.of(context);
+   OverlayEntry overlayEntry;
+   overlayEntry = OverlayEntry(builder: (context) {
+     return Positioned(
+       left: MediaQuery.of(context).size.width * 0.1,
+       top: MediaQuery.of(context).size.height * 0.80,
+       child: RedContainer(
+         child: Listener(
+        onPointerMove: (event) {
+          for (int index = 0; index < _reactions.length; index++) {
+            final box = context.findRenderObject() as RenderBox?;
+            if (box != null) {
+              final localPosition = box.globalToLocal(event.position);
+              final reactionWidth =
+                  (box.size.width - 16 * (_reactions.length - 1)) /
+                      _reactions.length;
+              final reactionBounds = Rect.fromLTWH(
+                index * (reactionWidth + 16),
+                0,
+                reactionWidth,
+                box.size.height,
+              );
+              if (reactionBounds.contains(localPosition)) {
+                _onPointerEnter(index);
+                return;
+              }
+            }
+          }
+          _onPointerExit();
+        },
+        onPointerUp: (event) {
+          _onPointerExit();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(16),
+            ),
+          child: RedContainer(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(_reactions.length, (index) {
+                double fontSize;
+                if (_hoverStates[index]) {
+                  fontSize = expandedSize;
+                } else if (_currentHoveredIndex != null) {
+                  fontSize = shrunkSize;
+                } else {
+                  fontSize = normalSize;
+                }
+                _lastFontSizes[index] = fontSize;
+                return TweenAnimationBuilder(
+                  tween: Tween(begin: _lastFontSizes[index], end: fontSize),
+                  duration: const Duration(milliseconds: 200),
+                  builder: (context, size, _) => Text(
+                    _reactions[index],
+                    style: TextStyle(fontSize: size),
+                  ),
+                );
+              }),
+            ),
+          ),
+        ),
+               ),
+       ),
+     );
+   });
+   overlayState.insert(overlayEntry);
+ }
 }
 
 
