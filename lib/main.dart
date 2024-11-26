@@ -30,7 +30,7 @@ class SocialReactionMainPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: const SocialReactionCollection(
+      body: const ReactionsButtonWidget(
         // emojis: [
         // Emoji(gif: 'images/like.gif', png: 'images/ic_like.png', text: 'Like'),
         // Emoji(gif: 'images/love.gif', png: 'images/love2.png', text: 'Love'),

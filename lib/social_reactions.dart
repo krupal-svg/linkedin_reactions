@@ -16,7 +16,7 @@ class Reaction {
   });
 }
 
-class SocialReactionCollection extends StatefulWidget {
+class ReactionsButtonWidget extends StatefulWidget {
   final String? likeGif;
   final String? likePng;
   final String? likeFillPng;
@@ -37,7 +37,7 @@ class SocialReactionCollection extends StatefulWidget {
   final String? sadText;
   final String? angryText;
 
-  const SocialReactionCollection(
+  const ReactionsButtonWidget(
       {Key? key,
       this.likeGif,
       this.loveGif,
@@ -61,10 +61,10 @@ class SocialReactionCollection extends StatefulWidget {
       : super(key: key);
 
   @override
-  createState() => SocialReactionCollectionState();
+  createState() => ReactionsButtonWidgetState();
 }
 
-class SocialReactionCollectionState extends State<SocialReactionCollection>
+class ReactionsButtonWidgetState extends State<ReactionsButtonWidget>
     with TickerProviderStateMixin {
   int durationAnimationBox = 500;
   int durationAnimationBtnLongPress = 150;
