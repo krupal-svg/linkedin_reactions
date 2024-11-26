@@ -30,12 +30,15 @@ class SocialReactionMainPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: SocialReactionCollection(
-      //   reactions: [
-      //   ReactionData(label: "Cry", reactionIconText: "🥲"),
-      //   ReactionData(label: "Smile", reactionIconText: "😄"),
-      //   ReactionData(label: "Frozen", reactionIconText: "🥶"),
-      // ],
+      body: const SocialReactionCollection(
+        // emojis: [
+        // Emoji(gif: 'images/like.gif', png: 'images/ic_like.png', text: 'Like'),
+        // Emoji(gif: 'images/love.gif', png: 'images/love2.png', text: 'Love'),
+        // Emoji(gif: 'images/haha.gif', png: 'images/haha2.png', text: 'Haha'),
+        // Emoji(gif: 'images/wow.gif', png: 'images/wow2.png', text: 'Wow'),
+        // Emoji(gif: 'images/sad.gif', png: 'images/sad2.png', text: 'Sad'),
+        // Emoji(gif: 'images/angry.gif', png: 'images/angry2.png', text: 'Angry'),
+      // ]
       ),
     );
   }

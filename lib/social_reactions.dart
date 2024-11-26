@@ -1,7 +1,20 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+class Reaction {
+  final String gif;
+  final String png;
+  final String text;
+
+  Reaction({
+    required this.gif,
+    required this.png,
+    required this.text,
+  });
+}
 
 class SocialReactionCollection extends StatefulWidget {
   final String? likeGif;
@@ -99,7 +112,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
       moveLeftIconAngryWhenRelease;
 
   Duration durationLongPress = const Duration(milliseconds: 250);
-  late Timer holdTimer;
+  Timer? holdTimer;
   bool isLongPress = false;
   bool isLiked = false;
 
@@ -430,8 +443,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         child: Transform.scale(
                           scale: zoomIconWhenRelease.value,
                           child: Image.asset(
-                            widget.likeGif ??
-                                'images/like.gif',
+                            widget.likeGif ?? 'images/like.gif',
                             width: 40.0,
                             height: 40.0,
                           ),
@@ -447,8 +459,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         child: Transform.scale(
                           scale: zoomIconWhenRelease.value,
                           child: Image.asset(
-                            widget.loveGif ??
-                                'images/love.gif',
+                            widget.loveGif ?? 'images/love.gif',
                             width: 40.0,
                             height: 40.0,
                           ),
@@ -464,8 +475,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         child: Transform.scale(
                           scale: zoomIconWhenRelease.value,
                           child: Image.asset(
-                            widget.hahaGif ??
-                                'images/haha.gif',
+                            widget.hahaGif ?? 'images/haha.gif',
                             width: 40.0,
                             height: 40.0,
                           ),
@@ -481,8 +491,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         child: Transform.scale(
                           scale: zoomIconWhenRelease.value,
                           child: Image.asset(
-                            widget.wowGif ??
-                                'images/wow.gif',
+                            widget.wowGif ?? 'images/wow.gif',
                             width: 40.0,
                             height: 40.0,
                           ),
@@ -498,8 +507,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         child: Transform.scale(
                           scale: zoomIconWhenRelease.value,
                           child: Image.asset(
-                            widget.sadGif ??
-                                'images/sad.gif',
+                            widget.sadGif ?? 'images/sad.gif',
                             width: 40.0,
                             height: 40.0,
                           ),
@@ -515,8 +523,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         child: Transform.scale(
                           scale: zoomIconWhenRelease.value,
                           child: Image.asset(
-                            widget.angryGif ??
-                                'images/angry.gif',
+                            widget.angryGif ?? 'images/angry.gif',
                             width: 40.0,
                             height: 40.0,
                           ),
@@ -602,8 +609,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         )
                       : const SizedBox(),
                   Image.asset(
-                    widget.likeGif ??
-                        'images/like.gif',
+                    widget.likeGif ?? 'images/like.gif',
                     width: 40.0,
                     height: 40.0,
                     fit: BoxFit.contain,
@@ -646,8 +652,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         )
                       : const SizedBox(),
                   Image.asset(
-                    widget.loveGif ??
-                        'images/love.gif',
+                    widget.loveGif ?? 'images/love.gif',
                     width: 40.0,
                     height: 40.0,
                     fit: BoxFit.contain,
@@ -690,8 +695,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         )
                       : const SizedBox(),
                   Image.asset(
-                    widget.hahaGif ??
-                        'images/haha.gif',
+                    widget.hahaGif ?? 'images/haha.gif',
                     width: 40.0,
                     height: 40.0,
                     fit: BoxFit.contain,
@@ -734,8 +738,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         )
                       : const SizedBox(),
                   Image.asset(
-                    widget.wowGif ??
-                        'images/wow.gif',
+                    widget.wowGif ?? 'images/wow.gif',
                     width: 40.0,
                     height: 40.0,
                     fit: BoxFit.contain,
@@ -779,8 +782,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         )
                       : const SizedBox(),
                   Image.asset(
-                    widget.sadGif ??
-                        'images/sad.gif',
+                    widget.sadGif ?? 'images/sad.gif',
                     width: 40.0,
                     height: 40.0,
                     fit: BoxFit.contain,
@@ -824,8 +826,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
                         )
                       : const SizedBox(),
                   Image.asset(
-                    widget.angryGif ??
-                        'images/angry.gif',
+                    widget.angryGif ?? 'images/angry.gif',
                     width: 40.0,
                     height: 40.0,
                     fit: BoxFit.contain,
@@ -849,7 +850,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
       ),
       margin: const EdgeInsets.only(top: 190.0),
       child: GestureDetector(
-        onTapDown: onTapDownBtn,
+        onLongPress: onTapDownBtn,
         onTapUp: onTapUpBtn,
         onTap: onTapBtn,
         child: Container(
@@ -942,35 +943,26 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
 
   String getImageIconBtn() {
     if (!isLongPress && isLiked) {
-      return widget.likeFillPng ??
-          'images/ic_like_fill.png';
+      return widget.likeFillPng ?? 'images/ic_like_fill.png';
     } else if (!isDragging) {
       switch (whichIconUserChoose) {
         case 1:
-          return widget.likeFillPng ??
-              'images/ic_like_fill.png';
+          return widget.likeFillPng ?? 'images/ic_like_fill.png';
         case 2:
-          return widget.lovePng ??
-              'images/love2.png';
+          return widget.lovePng ?? 'images/love2.png';
         case 3:
-          return widget.hahaPng ??
-              'images/haha2.png';
+          return widget.hahaPng ?? 'images/haha2.png';
         case 4:
-          return widget.wowPng ??
-              'images/wow2.png';
+          return widget.wowPng ?? 'images/wow2.png';
         case 5:
-          return widget.sadPng ??
-              'images/sad2.png';
+          return widget.sadPng ?? 'images/sad2.png';
         case 6:
-          return widget.angryPng ??
-              'images/angry2.png';
+          return widget.angryPng ?? 'images/angry2.png';
         default:
-          return widget.likePng ??
-              'images/ic_like.png';
+          return widget.likePng ?? 'images/ic_like.png';
       }
     } else {
-      return widget.likePng ??
-          'images/ic_like.png';
+      return widget.likePng ?? 'images/ic_like.png';
     }
   }
 
@@ -1094,7 +1086,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
     animControlIconWhenDrag.forward();
   }
 
-  void onTapDownBtn(TapDownDetails tapDownDetail) {
+  void onTapDownBtn() {
     holdTimer = Timer(durationLongPress, showBox);
   }
 
@@ -1103,7 +1095,7 @@ class SocialReactionCollectionState extends State<SocialReactionCollection>
       isLongPress = false;
     });
 
-    holdTimer.cancel();
+    holdTimer?.cancel();
 
     animControlBtnLongPress.reverse();
 
